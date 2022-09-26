@@ -8,7 +8,6 @@ use sdl2::keyboard::Keycode;
 use world::World;
 use std::time::Duration;
 
-
 pub fn main() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
@@ -26,9 +25,8 @@ pub fn main() {
     let mut world = World::new();
     
     world.add_player(entity::Player::new(1, Color::RGB(255, 0, 0), Point::new(40, 40)));
-    world.add_player(entity::Player::new(1, Color::RGB(0, 255, 0), Point::new(120, 40)));
 
-    'running: loop {
+    'main: loop {
         canvas.clear();
 
 
@@ -36,7 +34,7 @@ pub fn main() {
             match event {
                 Event::Quit {..} |
                 Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
-                    break 'running
+                    break 'main
                 },
                 _ => {
                     world.process_event(&event);
