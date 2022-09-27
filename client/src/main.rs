@@ -1,6 +1,7 @@
 pub mod world;
-pub mod entity;
-use entity::Renderable;
+pub mod rect;
+pub mod traits;
+
 use sdl2::rect::{Point};
 use sdl2::pixels::{Color};
 use sdl2::event::Event;
@@ -24,12 +25,13 @@ pub fn main() {
     
     let mut world = World::new();
     
-    world.add_player(entity::Player::new(1, Color::RGB(255, 0, 0), Point::new(40, 40)));
+    world.add_entity("main_actor", Box::new(
+        rect::Rectangle::new(1, Color::RGB(255, 0, 0), Point::new(40, 40))
+    ));
 
     'main: loop {
         canvas.clear();
-
-
+        
         for event in event_pump.poll_iter() {
             match event {
                 Event::Quit {..} |
