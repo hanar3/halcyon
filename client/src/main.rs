@@ -1,6 +1,7 @@
 pub mod world;
 pub mod rect;
 pub mod traits;
+pub mod components;
 
 use sdl2::rect::{Point};
 use sdl2::pixels::{Color};
