@@ -1,5 +1,5 @@
 pub mod world;
-pub mod rect;
+pub mod entities;
 pub mod traits;
 pub mod components;
 
@@ -9,6 +9,7 @@ use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use world::World;
 use std::time::Duration;
+
 
 pub fn main() {
     let sdl_context = sdl2::init().unwrap();
@@ -23,13 +24,12 @@ pub fn main() {
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
-    
     let mut world = World::new();
     
-    world.add_entity("main_actor", Box::new(
-        rect::Rectangle::new(1, Color::RGB(255, 0, 0), Point::new(40, 40))
-    ));
-
+    let main_actor = entities::test_entity::Rectangle::new(1, Color::RGB(255, 0, 0), Point::new(40, 40));
+    
+    world.add_entity(Box::new(main_actor));
+    println!("{}", stringify!(main_actor));
     'main: loop {
         canvas.clear();
         

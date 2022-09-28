@@ -1,2 +1,10 @@
 pub mod keyboard_control;
-pub mod component;
+
+pub enum ComponentId {
+  KeyboardControl,
+  Color,
+  Sprite,
+}
+pub enum Components {
+  KeyboardControl(keyboard_control::KeyboardControl),
+}
