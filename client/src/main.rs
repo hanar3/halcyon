@@ -1,15 +1,25 @@
+#[macro_use]
 pub mod world;
 pub mod entities;
 pub mod traits;
 pub mod components;
+pub mod system;
 
 use sdl2::rect::{Point};
 use sdl2::pixels::{Color};
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
+use system::event_queue::{EventQueue, EVENT_EMITTER};
 use world::World;
+use std::any::Any;
 use std::time::Duration;
 
+use crate::system::{event_listener::EventListener, event_type::EventType};
+
+
+struct KeydownEvent {
+    keycode: Option<Keycode>,
+}
 
 pub fn main() {
     let sdl_context = sdl2::init().unwrap();
@@ -28,19 +38,37 @@ pub fn main() {
     
     let main_actor = entities::test_entity::Rectangle::new(1, Color::RGB(255, 0, 0), Point::new(40, 40));
     
+    
+    EVENT_EMITTER.lock().unwrap().on("keydown", |event| {
+        let d = event.downcast_ref::<KeydownEvent>();
+        match d {
+            Some(d) => {
+                println!("Keydown event!");
+            }
+            None => {}
+        }
+    });
+    
     world.add_entity(Box::new(main_actor));
-    println!("{}", stringify!(main_actor));
+    
     'main: loop {
         canvas.clear();
-        
         for event in event_pump.poll_iter() {
             match event {
                 Event::Quit {..} |
                 Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
                     break 'main
                 },
+                Event::KeyDown { timestamp, window_id, keycode, scancode, keymod, repeat } => {
+                    let mut boxed  = Box::new(KeydownEvent {
+                        keycode: keycode
+                    }) as Box<dyn Any>;
+
+                    EVENT_EMITTER.lock().unwrap().emit::<KeydownEvent>("keydown", &mut boxed);
+                }
+
                 _ => {
-                    world.process_event(&event);
+
                 }
             }
         }
