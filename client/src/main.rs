@@ -18,7 +18,7 @@ use crate::system::{event_listener::EventListener, event_type::EventType};
 
 
 struct KeydownEvent {
-    keycode: Option<Keycode>,
+    keycode: Keycode,
 }
 
 pub fn main() {
@@ -40,15 +40,10 @@ pub fn main() {
     
     
     EVENT_EMITTER.lock().unwrap().on("keydown", |event| {
-        let d = event.downcast_ref::<KeydownEvent>();
-        match d {
-            Some(d) => {
-                println!("Keydown event!");
-            }
-            None => {}
-        }
+        let d = event.downcast_ref::<KeydownEvent>().unwrap();
+        println!("Keydown event 1! {}", d.keycode);
     });
-    
+
     world.add_entity(Box::new(main_actor));
     
     'main: loop {
@@ -61,10 +56,10 @@ pub fn main() {
                 },
                 Event::KeyDown { timestamp, window_id, keycode, scancode, keymod, repeat } => {
                     let mut boxed  = Box::new(KeydownEvent {
-                        keycode: keycode
+                        keycode: keycode.unwrap(),
                     }) as Box<dyn Any>;
 
-                    EVENT_EMITTER.lock().unwrap().emit::<KeydownEvent>("keydown", &mut boxed);
+                    EVENT_EMITTER.lock().unwrap().emit("keydown", &mut boxed);
                 }
 
                 _ => {

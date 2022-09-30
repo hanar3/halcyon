@@ -11,7 +11,7 @@ impl<'a> EventQueue<'a> {
     self.listeners.push(EventListener { event_type: event_name, handler_fn: handlr })
   }
 
-  pub fn emit<T>(&self, event_name: &'a str, data: &mut Box<dyn Any>) {
+  pub fn emit(&self, event_name: &'a str, data: &mut Box<dyn Any>) {
     for listener in self.listeners.iter() {
       if listener.event_type == event_name {
         (listener.handler_fn)(data);
