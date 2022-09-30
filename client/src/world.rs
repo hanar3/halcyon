@@ -22,10 +22,7 @@ impl World {
       entity.as_ref().render(canvas);
     }
   }
-  
-  // pub fn get_entity(&self) -> Option<&Box<dyn Entity>> {
-  //   self.entities_map.get(label)
-  // }
+
 
   pub fn process_event(&mut self, event: &Event) {
 
