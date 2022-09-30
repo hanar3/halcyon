@@ -1,7 +1,7 @@
 use std::{collections::HashMap, string, ops::DerefMut};
 use sdl2::{event::Event, render::WindowCanvas, keyboard::Keycode};
 
-use crate::{traits::{Entity}, system::event_queue::EventQueue};
+use crate::{traits::{Entity}};
 
 pub struct World {
   entities_map: HashMap<&'static str, Box<dyn Entity>>
