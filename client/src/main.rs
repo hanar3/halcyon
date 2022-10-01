@@ -13,7 +13,6 @@ pub fn main() {
         app.run();
         app.process_input();
         let current_event = app::application::CURRENT_EVENT.read().unwrap();
-
         match &*current_event {
             Some(e) => {
                 match e {
